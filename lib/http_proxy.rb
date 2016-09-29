@@ -2,13 +2,26 @@
 #
 # Copyright 2016 Carter Hay
 
-require 'socket'
-require 'uri'
+require 'webrick'
+require 'webrick/httpproxy'
 
-class HttpProxy
-  def start
-    @socket = TCPServer.new 8000
-
-
-
+handler = proc do |req, res|
+  puts req.header['host']
+  unless res.body.nil?
+    unless res['content-type'].nil?
+      #if res['content-type'].include? 'text/html' and req.header['host'].include? 'carterhay'
+      if req.header['host'].include? 'carterhay'
+        res.body = 'replaced'
+      end
+    end
+  end
 end
+
+proxy = WEBrick::HTTPProxyServer.new(
+  Port: 8080, 
+  ProxyContentHandler: handler, 
+  AccessLog: []
+)
+
+proxy.start
+
