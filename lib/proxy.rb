@@ -4,6 +4,8 @@
 
 require 'webrick'
 require 'webrick/httpproxy'
+require 'webrick/https'
+require 'openssl'
 require 'zlib'
 
 def unzip(body)
@@ -12,7 +14,6 @@ end
 
 handler = proc do |req, res|
   puts req
-  #puts res
   if res['content-encoding'] == 'gzip'
     #puts unzip(res.body)
   end
@@ -24,7 +25,6 @@ handler = proc do |req, res|
         res['content-encoding'] = ''
         res.body = File.read('payload.html')
         res['content-length'] = res.body.bytesize
-        puts res
       end
       #if res['content-type'].include? 'text/html' and req.header['host'].include? 'carterhay'
       #if req.header['host'].include? 'carterhay'
@@ -34,8 +34,15 @@ handler = proc do |req, res|
   end
 end
 
+class Proxy < WEBrick::HTTPProxyServer
+  def do_CONNECT(req, res)
+    #req['host'] = 'localhost'
+    #res = nil
+  end
+end
 
-proxy = WEBrick::HTTPProxyServer.new(
+
+proxy = Proxy.new(
   Port: 8080, 
   ProxyContentHandler: handler, 
   AccessLog: []

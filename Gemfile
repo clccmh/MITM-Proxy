@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 # gem "rails"
+gem 'arp_scan'
 
 # gem 'webrick', '~> 1.3', '>= 1.3.1'
 #
