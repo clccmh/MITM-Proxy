@@ -3,19 +3,29 @@ GEM
   specs:
     arp_scan (0.1.0)
     ast (2.3.0)
+    macaddr (1.7.1)
+      systemu (~> 2.6.2)
+    network_interface (0.0.1)
+    packetfu (1.1.11)
+      network_interface (~> 0.0)
+      pcaprub (~> 0.12)
     parser (2.3.1.4)
       ast (~> 2.2)
+    pcaprub (0.12.4)
     ruby-lint (2.3.0)
       parser (~> 2.2)
       slop (~> 3.4, >= 3.4.7)
     slop (3.6.0)
+    systemu (2.6.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   arp_scan
+  macaddr
+  packetfu
   ruby-lint
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
