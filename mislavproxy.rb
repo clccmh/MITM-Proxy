@@ -366,8 +366,8 @@ class DebuggingProxy
       :Logger => logger,
       :AccessLog => [],
       :SSLEnable => true,
-      #:SSLCertName => [['CN', 'localhost']],
-      #:SSLCertComment => 'DebuggingProxy CA',
+      :SSLCertName => [['CN', 'localhost']],
+      :SSLCertComment => 'DebuggingProxy CA',
       :SSLPrivateKey => OpenSSL::PKey::RSA.new(cert_info),
       :SSLCertificate => OpenSSL::X509::Certificate.new(cert_info),
       :SSLVerifyClient => OpenSSL::SSL::VERIFY_NONE

@@ -11,8 +11,6 @@ def unzip(body)
 end
 
 handler = proc do |req, res|
-  puts req
-  #puts res
   if res['content-encoding'] == 'gzip'
     #puts unzip(res.body)
   end
@@ -22,7 +20,7 @@ handler = proc do |req, res|
     unless res['content-type'].nil?
       if res['content-type'].include? 'text/html'
         res['content-encoding'] = ''
-        res.body = File.read('payload.html')
+        res.body = File.read('../payloads/payload.html')
         res['content-length'] = res.body.bytesize
         puts res
       end
@@ -36,7 +34,7 @@ end
 
 
 proxy = WEBrick::HTTPProxyServer.new(
-  Port: 8080, 
+  Port: ARGV[0], 
   ProxyContentHandler: handler, 
   AccessLog: []
 )
