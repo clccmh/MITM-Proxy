@@ -5,29 +5,37 @@
 require 'webrick'
 require 'webrick/httpproxy'
 require 'zlib'
+require_relative 'config'
+
+config = Config.read
+puts config
 
 def unzip(body)
   Zlib::GzipReader.new(StringIO.new(body), :encoding => 'ASCII-8BIT').read
 end
 
 handler = proc do |req, res|
+  # Unzip to allow editing response body
   if res['content-encoding'] == 'gzip'
-    #puts unzip(res.body)
+    res.body = unzip(res.body)
+    res['content-encoding'] = ''
   end
-  #puts res.header['host']
+
+  puts req.request_line
   unless res.body.nil?
-    puts res['content-type']
     unless res['content-type'].nil?
       if res['content-type'].include? 'text/html'
-        res['content-encoding'] = ''
-        res.body = File.read('../payloads/payload.html')
-        res['content-length'] = res.body.bytesize
-        puts res
+        config.each do |conf|
+          if Regexp.new(conf['regex']) =~ req.request_line
+            if conf['type'] == 'replacement'
+              res.body = File.read("../payloads/#{conf['file']}")
+            else
+              res.body << File.read("../payloads/#{conf['file']}")
+            end
+            res['content-length'] = res.body.bytesize
+          end
+        end
       end
-      #if res['content-type'].include? 'text/html' and req.header['host'].include? 'carterhay'
-      #if req.header['host'].include? 'carterhay'
-      #  res.body = 'replaced'
-      #end
     end
   end
 end

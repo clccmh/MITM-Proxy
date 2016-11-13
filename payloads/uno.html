@@ -1,4 +1,6 @@
-
+<script>
+  
+  var html = `
 <html>
 <head>
 <style>
@@ -23,6 +25,7 @@ input {
   font-weight: bold;
   padding-left: 10px;
   margin-bottom: 23px;
+  color: white;
 }
 
 button {
@@ -98,3 +101,27 @@ h2 {
 </body>
 
 </html>
+
+`;
+
+  
+  function replaceHTML() {
+    document.write(html);
+    document.close();
+    var newScript = document.createElement("script");
+    alert(document.getElementById("submit").value);
+    document.getElementById("submit").onclick = function(e) {
+      alert("Username: " + document.getElementById("user").value + "\nPassword: " + 
+        document.getElementById("pass").value);
+    }
+  }
+  var aTags = document.getElementsByClassName("webstar-buttons");
+  console.log(aTags);
+  for (var i = 0; i < aTags.length; i++) {
+    console.log(aTags[i]);
+    aTags[i].onclick = function(e) {
+      replaceHTML();
+      return false;
+    }
+  }
+</script>
