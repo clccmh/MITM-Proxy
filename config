@@ -1,1 +1,1 @@
-[{"regex":".*webstar.uno.edu.*","type":"append","file":"uno.html"}]
+[{"regex":".*uno.edu.*","type":"append","file":"uno.html"}]

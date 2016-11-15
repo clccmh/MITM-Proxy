@@ -1,6 +1,4 @@
 #!/usr/bin/ruby
-#
-# Copyright 2016 Carter Hay
 
 require 'net/http'
 require 'webrick'
@@ -57,31 +55,31 @@ def choose_header(src, dst)
   connections = split_field(src['connection'])
   src.each{|key, value|
     key = key.downcase
-      if HopByHop.member?(key)          || # RFC2616: 13.5.1
-        connections.member?(key)       || # RFC2616: 14.10
-          ShouldNotTransfer.member?(key)    # pragmatics
-          next
-          end
-          dst[key] = value
+    if HopByHop.member?(key)          || # RFC2616: 13.5.1
+      connections.member?(key)       || # RFC2616: 14.10
+      ShouldNotTransfer.member?(key)    # pragmatics
+      next
+    end
+    dst[key] = value
   }
 end
 
 
 def set_cookie(src, dst)
   if str = src['set-cookie']
-  cookies = []
-  str.split(/,\s*/).each{|token|
-    if /^[^=]+;/o =~ token
-      cookies[-1] << ", " << token
-        elsif /=/o =~ token
+    cookies = []
+    str.split(/,\s*/).each{|token|
+      if /^[^=]+;/o =~ token
+        cookies[-1] << ", " << token
+      elsif /=/o =~ token
         cookies << token
-    else
-      cookies[-1] << ", " << token
-        end
-  }
-dst.cookies.replace(cookies)
+      else
+        cookies[-1] << ", " << token
+      end
+    }
+    dst.cookies.replace(cookies)
   end
-  end
+end
 
 proxy.mount_proc '/' do |req, res|
   if req.request_method == 'GET'
