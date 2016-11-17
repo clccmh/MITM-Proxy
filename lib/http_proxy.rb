@@ -86,14 +86,17 @@ dst.cookies.replace(cookies)
 proxy.mount_proc '/' do |req, res|
   if req.request_method == 'GET'
     http = Net::HTTP.new req.host, 80, 'localhost', 8000
-    new_res = http.get URI(req.request_uri)
+    uri = URI(req.request_uri)
+
+    new_res = http.request (Net::HTTP::Get.new  uri, initheader = {'accept-encoding' => ''})
+    res.status = new_res.code.to_i
+    choose_header new_res, res
+    set_cookie new_res, res
+    res.body = new_res.body
+    res['content-length'] = res.body.bytesize
   end 
-  res.status = new_res.code.to_i
-  choose_header new_res, res
-  set_cookie new_res, res
-  res.body = new_res.body
-  res['content-length'] = res.body.bytesize
 end
 
 proxy.start
 
+trap 'INT' do proxy.shutdown end

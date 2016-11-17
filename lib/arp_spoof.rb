@@ -86,4 +86,7 @@ while true
     puts "[+] Sending ARP packet to router: #{arp_packet_router.arp_daddr_ip}"
     arp_packet_router.to_w(ARGV[0])
   end
+  if tools.arp_hosts.length < 2
+    sleep(0.5)
+  end
 end
